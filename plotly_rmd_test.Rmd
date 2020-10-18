@@ -1,0 +1,86 @@
+---
+title: "plotly_rmd"
+author: "Sergio Wang"
+date: "18/10/2020"
+output: html_document
+---
+
+```{r setup, eval=FALSE}
+library(plotly)
+plot_ly(mtcars, x = mtcars$wt, y = mtcars$mpg, mode = "markers")
+```
+
+## Basic Scatterplot
+
+```{r, echo=FALSE, message=FALSE}
+library(plotly)
+plot_ly(mtcars, x = mtcars$wt, y = mtcars$mpg, mode = "markers")
+```
+
+## Colored Scatterplot
+
+```{r, echo=FALSE, message=FALSE}
+library(plotly)
+plot_ly(mtcars, x = mtcars$wt, y = mtcars$mpg, mode = "markers", color = as.factor(mtcars$cyl))
+```
+
+## Continuous color
+
+```{r, echo=FALSE, message=FALSE}
+library(plotly)
+plot_ly(mtcars, x = mtcars$wt, y = mtcars$mpg, mode = "markers", color = mtcars$disp)
+```
+
+## Scatterplot Sizing
+
+```{r, echo=FALSE, message=FALSE}
+library(plotly)
+plot_ly(mtcars, x = mtcars$wt, y = mtcars$mpg, mode = "markers", 
+        color = as.factor(mtcars$cyl), size = mtcars$hp)
+```
+
+## 3D scatterplot color
+
+```{r, echo=FALSE, message=FALSE}
+set.seed(2016-07-21)
+temp <- rnorm(100, mean = 30, sd = 5)
+pressue <- rnorm(100)
+dtime <- 1:100
+plot_ly(x = temp, y = pressue, z= dtime, 
+        type = 'scatter3d', mode = 'markers', color = temp)
+```
+
+## Line Graphs
+
+```{r, echo=FALSE, message=FALSE}
+data("airmiles")
+plot_ly(x = time(airmiles), y=airmiles)
+```
+
+## Multilines Graph
+
+```{r, echo=FALSE, message=FALSE}
+library(plotly)
+library(tidyr)
+library(dplyr)
+data("EuStockMarkets")
+
+stocks <- as.data.frame(EuStockMarkets) %>%
+  gather(index, price) %>%
+  mutate(time = rep(time(EuStockMarkets), 4))
+
+plot_ly(stocks, x = stocks$time, y = stocks$price, color = stocks$index)
+```
+
+## GGPLOT to Plotly
+
+```{r, message=FALSE}
+set.seed(100)
+d <- diamonds[sample(nrow(diamonds), 1000), ]
+
+p <- ggplot(data = d, aes(x = carat, y = price)) +
+      geom_point(aes(text = paste("Clarity:", clarity)), size = 4) +
+      geom_smooth(aes(colour = cut, fill = cut)) + facet_wrap(~ cut)
+
+(gg <- ggplotly(p))
+```
